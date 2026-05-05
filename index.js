@@ -22,7 +22,12 @@
   }
 
   if (callbacks) {
+    Object.keys(callbacks).forEach(e => {
+      element.addEventListener(e, callbacks[e])
+    });
   }
+
+  // callbacks = { click: onClick, keydown: onKey }
 
   return element;
 }
@@ -37,7 +42,7 @@ class Component {
   }
 
   getDomNode() {
-    if(!this._domNode)
+    if (!this._domNode)
       this._domNode = this.render();
     return this._domNode;
   }
@@ -57,6 +62,7 @@ class TodoList extends Component {
     super();
     this.state = {
       tasks: ["Сделать домашку", "Сделать практику", "Пойти домой"],
+      task_name: null
     }
   }
 
