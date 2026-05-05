@@ -56,6 +56,51 @@ class Component {
   }
 }
 
+class TaskItem {
+  constructor(label) {
+    this.label = label;
+    this.status = false;
+  }
+}
+
+class Task extends Component {
+  constructor(task, onToggle, onDelete) {
+    super();
+    this.task = task;
+    this.onToggle = onToggle;
+    this.onDelete = onDelete;
+    this.state = {
+      isDeleting: false
+    };
+  }
+
+  render() {
+    return createElement("li", {}, [
+      createElement("input", {
+        type: "checkbox",
+        ...(this.task.status ? { checked: "checked" } : {})
+      }, "", {
+        change: e => this.onToggle(e.target.checked)
+      }),
+      createElement("label", {
+        style: `color: ${this.task.status ? "gray" : "black"}`
+      }, this.task.label),
+      createElement("button", {
+        style: this.state.isDeleting ? "background-color: red" : ""
+      }, "🗑️", {
+        click: () => {
+          if (this.state.isDeleting) {
+            this.onDelete();
+          } else {
+            this.state.isDeleting = true;
+            this.update();
+          }
+        }
+      })
+    ])
+  }
+}
+
 class TodoList extends Component {
 
   constructor() {
