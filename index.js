@@ -26,11 +26,25 @@
 
 class Component {
   constructor() {
+    this._domNode = null;
+  }
+
+  render() {
+    throw new Error("Render должен быть переопределен.")
   }
 
   getDomNode() {
-    this._domNode = this.render();
+    if(!this._domNode)
+      this._domNode = this.render();
     return this._domNode;
+  }
+
+  update() {
+    const newDomNode = this.render();
+    if (this._domNode && this._domNode.parentNode) {
+      this._domNode.parentNode.replaceChild(newDomNode, this._domNode);
+    }
+    this._domNode = newDomNode;
   }
 }
 
