@@ -74,16 +74,24 @@ class TodoList extends Component {
           id: "new-todo",
           type: "text",
           placeholder: "Задание",
+        }, null, {
+          input: (e) => this.onAddInputChange(e)
         }),
-        createElement("button", { id: "add-btn" }, "+"),
+        createElement("button", { id: "add-btn" }, "+", {
+          click: () => this.onAddTask()
+        }),
       ]),
 
       createElement("ul", { id: "todos" },
-        this.state.tasks.map(task =>
-          createElement("li", {}, [
-            createElement("input", { type: "checkbox" }),
+        this.state.tasks.map((task, index) =>
+          createElement("li", {"data-index": index}, [
+            createElement("input", { type: "checkbox" }, null, {
+              change: (e) => this.onDoTask(index, e)
+            }),
             createElement("label", {}, task),
-            createElement("button", {}, "🗑️")
+            createElement("button", {"data-delete": index}, "🗑️", {
+              click: () => this.onDeleteTask(index)
+            })
           ])
         )
       )
@@ -91,11 +99,25 @@ class TodoList extends Component {
   }
 
   onAddTask() {
-    this.state.tasks.push(new Task(this.state.task_name))
+    this.state.tasks.push(new Task(this.state.task_name.trim()))
+    this.state.task_name = "";
+    this.update();
   }
 
   onAddInputChange(e) {
     this.state.task_name = e.target.value;
+  }
+
+  onDoTask(index, e) {
+    const label = this._domNode.querySelector(`label[data-index="${index}"]`);
+    if (label) {
+      label.style.color = e.target.checked ? "gray" : "";
+    }
+  }
+
+  onDeleteTask(index) {
+    this.state.tasks.splice(index, 1);
+    this.update();
   }
 }
 
