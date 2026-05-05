@@ -1,4 +1,4 @@
-﻿function createElement(tag, attributes, children) {
+﻿function createElement(tag, attributes, children, callbacks) {
   const element = document.createElement(tag);
 
   if (attributes) {
@@ -64,6 +64,14 @@ class TodoList extends Component {
         ]),
       ]),
     ]);
+  }
+
+  onAddTask() {
+
+  }
+
+  onAddInputChange() {
+
   }
 }
 
